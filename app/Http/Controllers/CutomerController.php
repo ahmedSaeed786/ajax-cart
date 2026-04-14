@@ -69,11 +69,6 @@ class CutomerController extends Controller
     {
         //
 
-
-
-
-
-
         $customer = cutomer::create([
             "name" => $request->customer_name,
             "date" => $request->date,

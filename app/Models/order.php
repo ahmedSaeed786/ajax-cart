@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\cutomer;
 
 class order extends Model
 {
@@ -15,4 +16,9 @@ class order extends Model
         "total",
         "c_id",
     ];
+
+    public function customer()
+    {
+        return $this->hasOne(cutomer::class, 'id', 'c_id');
+    }
 }

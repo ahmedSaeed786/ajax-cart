@@ -109,6 +109,35 @@
 
                         </form>
 
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Customer Name</th>
+                                    <th scope="col">Item Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($orders as $order)
+                                    <tr class="">
+                                        <td>{{ $order->customer->name }}</td>
+                                        <td>{{ $order->name }}</td>
+                                        <td>{{ $order->qty }}</td>
+                                        <td> {{ $order->amount }}</td>
+                                        <td>{{ $order->total }}</td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+
 
                     </div>
                 </div>
@@ -257,146 +286,6 @@
 
         });
     </script>
-
-
-    {{-- <script>
-        $(document).ready(function() {
-
-
-            let isValid = {
-                customer_name: false,
-                phone: false,
-                name: false,
-                qty: false,
-                amount: false,
-                action: false,
-                total: false
-            };
-
-
-            function validateField(fieldName, value) {
-                return $.ajax({
-                    url: "{{ route('customer.validate') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        field: fieldName,
-                        value: value
-                    },
-                    success: function() {
-                        let input = $('[name="' + fieldName + '"]');
-
-                        input.removeClass('is-invalid');
-                        $('#error-' + fieldName).remove();
-
-                        isValid[fieldName] = true;
-                    },
-                    error: function(xhr) {
-                        let error = xhr.responseJSON.error;
-                        let input = $('[name="' + fieldName + '"]');
-
-                        input.addClass('is-invalid');
-                        $('#error-' + fieldName).remove();
-
-                        input.after('<div id="error-' + fieldName + '" class="invalid-feedback">' +
-                            error + '</div>');
-
-                        isValid[fieldName] = false;
-                    }
-                });
-            }
-
-
-            $('#action').on('blur', function() {
-                validateField('action', $(this).val());
-            });
-            $('#customer_name').on('blur', function() {
-                validateField('customer_name', $(this).val());
-            });
-
-            $('#phone').on('blur', function() {
-                validateField('phone', $(this).val());
-            });
-
-
-            $('[name="qty"], [name="amount"]').on('keyup', function() {
-                let qty = parseFloat($('[name="qty"]').val()) || 0;
-                let amount = parseFloat($('[name="amount"]').val()) || 0;
-                $('[name="total"]').val(qty * amount);
-            });
-
-
-            $('#btnAddItem').on('click', function() {
-
-                let name = $('[name="name"]').val();
-                let action = $('[name="action"]').val();
-                let qty = $('[name="qty"]').val();
-                let amount = $('[name="amount"]').val();
-                let total = $('[name="total"]').val();
-
-                $.when(
-                    validateField('name', name),
-                    validateField('qty', qty),
-                    validateField('amount', amount),
-                    validateField('total', total)
-                ).done(function() {
-
-                    if (
-                        isValid.name &&
-                        isValid.qty &&
-                        isValid.amount &&
-                        isValid.total
-                    ) {
-
-
-                        let row = `
-                    <tr>
-                        <td>${name}</td>
-                        <td>${qty}</td>
-                        <td>${amount}</td>
-                        <td>${total}</td>
-                    </tr>
-                `;
-
-                        $('table tbody').append(row);
-
-                        $('[name="name"]').val('');
-                        $('[name="qty"]').val('');
-                        $('[name="amount"]').val('');
-                        $('[name="total"]').val('');
-
-                        isValid.name = false;
-                        isValid.qty = false;
-                        isValid.amount = false;
-                        isValid.total = false;
-                    }
-
-                });
-
-            });
-
-
-            $('#customerForm').on('submit', function(e) {
-                e.preventDefault();
-
-                let customer_name = $('#customer_name').val();
-                let phone = $('#phone').val();
-
-                $.when(
-                    validateField('customer_name', customer_name),
-                    validateField('phone', phone)
-                ).done(function() {
-
-                    if (isValid.customer_name && isValid.phone) {
-                        $('#customerForm')[0].submit();
-                    }
-
-                });
-
-            });
-
-        });
-    </script> --}}
 
 
     <script>
