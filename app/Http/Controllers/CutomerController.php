@@ -41,11 +41,11 @@ class CutomerController extends Controller
     public function validateField(Request $request)
     {
         $rules = [
-            'customer_name' => 'alpha|required|string|max:255',
-            'name' => 'alpha|required|string|max:255',
-            'qty' => 'required|integer|min:1',
-            'amount' => 'required|integer|min:1',
-            'total' => 'required|integer|min:1',
+            'customer_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'qty' => 'required|min:1',
+            'amount' => 'required|min:1',
+            'total' => 'required|min:1',
             'phone' =>  ['required', 'regex:/^\+?[0-9]+( [0-9]+)*$/'],
         ];
 
@@ -112,7 +112,7 @@ class CutomerController extends Controller
 
         $customer = cutomer::where('id', $request->id)->update([
 
-            "name" => $request->c_name,
+            "name" => $request->customer_name,
             "phone" => $request->phone,
             "date" => $request->date,
         ]);

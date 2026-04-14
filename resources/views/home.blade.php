@@ -15,6 +15,7 @@
 
 
                         <form method="POST" action="{{ route('customer') }}" id="customerForm">
+
                             @csrf
                             <input type="hidden" name="items" id="itemsInput">
                             @if ($errors->any())
@@ -29,7 +30,7 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" id="customer_name" placeholder="Customer Name"
+                                    <input type="text" id="customer_name" autocomplete="off" placeholder="Customer Name"
                                         name="customer_name" class="form-control">
 
                                 </div>
@@ -44,8 +45,8 @@
                             <br>
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" id="phone" placeholder="Customer Phone" name="phone"
-                                        class="form-control">
+                                    <input type="text" id="phone" autocomplete="off" placeholder="Customer Phone"
+                                        name="phone" class="form-control">
 
                                 </div>
 
@@ -54,18 +55,20 @@
                             <br>
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="name" placeholder="Item Name">
+                                    <input type="text" autocomplete="off" class="form-control" id="name"
+                                        name="name" placeholder="Item Name">
                                 </div>
                                 <div class="col">
-                                    <input type="number" class="form-control" name="qty" placeholder="Quantity">
+                                    <input type="text" autocomplete="off" class="form-control" id="qty"
+                                        name="qty" placeholder="Quantity">
                                 </div>
                                 <div class="col">
-                                    <input type="number" class="form-control " name="amount"
+                                    <input type="text" class="form-control" autocomplete="off"id="amount" name="amount"
                                         value="{{ old('amount') }}"placeholder="Amount">
                                 </div>
                                 <div class="col">
-                                    <input type="number" class="form-control" value="{{ old('total') }}" name="total"
-                                        placeholder="Total">
+                                    <input type="text" class="form-control" autocomplete="off"
+                                        value="{{ old('total') }}" name="total" placeholder="Total">
                                 </div>
                                 <div class="col">
                                     <input type="button" value="Add Item" id="btnAddItem" class="btn btn-success">
@@ -103,42 +106,7 @@
                                     <button type="submit" name="action" value="customer" class="btn btn-primary">
                                         Submit
                                     </button>
-                                    <div class="modal fade" id="editModal">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
 
-                                                <div class="modal-header">
-                                                    <h5>Edit Customer</h5>
-                                                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="edit_id">
-
-                                                    <div class="mb-2">
-                                                        <input type="text" name="c_name" id="c_name"
-                                                            class="form-control" placeholder="Customer Name">
-                                                    </div>
-
-                                                    <div class="mb-2">
-                                                        <input type="text" name="phone" id="phone"
-                                                            class="form-control" placeholder="Phone">
-                                                    </div>
-
-                                                    <div class="mb-2">
-                                                        <input type="text" name="date" value="<?php echo date('Y-m-d'); ?>"
-                                                            class="form-control datetimepicker" name="date"
-                                                            placeholder="Select Date">
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button class="btn btn-primary" id="btnUpdate">Update</button>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
                                     {{-- <button type="submit" id="action" value="customer"
                                         name="action"class="btn btn-primary">Submit</button> --}}
                                 </div>
@@ -155,9 +123,9 @@
                                     <th scope="col">Customer Name</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">phone</th>
+                                    <th scope="col">item</th>
                                     <th scope="col">total</th>
 
-                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,20 +135,16 @@
                                         <td>{{ $order->name }}</td>
                                         <td>{{ $order->date }}</td>
                                         <td>{{ $order->phone }}</td>
+                                        <td>
+                                            <select class="custom-dropdown" name="options">
+                                                @foreach ($order->item as $detail)
+                                                    <option value="">{{ $detail->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                         <td>{{ $order->item_sum_total }}</td>
 
-                                        <td>
-                                            <a href="{{ route('customer.show', $order->id) }}" class="btn btn-primary"
-                                                onclick="return showAlert()">Show</a>
-                                            <button class="btn btn-warning btnEdit" data-id="{{ $order->id }}">
-                                                Edit
-                                            </button>
-                                            <form action="{{ route('customer.destroy', $order->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </td>
+
                                     </tr>
                                 @endforeach
 
@@ -196,7 +160,50 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <script>
+        // customer Name Validation
+        $('#customer_name').on('keypress', function(e) {
+            var keyCode = e.which;
+            // Allow uppercase (65-90) and lowercase (97-122)
+            if (!((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode == 32))) {
+                e.preventDefault();
+            }
+        });
+
+        // item Name Validation
+        $('#name').on('keypress', function(e) {
+            var keyCode = e.which;
+            // Allow uppercase (65-90) and lowercase (97-122)
+            if (!((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode == 32))) {
+                e.preventDefault();
+            }
+        });
+
+
+
+
+        $('#phone').on('keypress', function(key) {
+            if (key.charCode < 48 || key.charCode > 57) {
+                return false;
+            }
+        });
+        $('#qty').on('keypress', function(key) {
+            if (key.charCode < 48 || key.charCode > 57) {
+                return false;
+            }
+        });
+        $('#amount').on('keypress', function(key) {
+            if (key.charCode < 48 || key.charCode > 57) {
+                return false;
+            }
+        });
+        $('#total').on('keypress', function(key) {
+            if (key.charCode < 48 || key.charCode > 57) {
+                return false;
+            }
+        });
         $(document).ready(function() {
 
             let items = [];
@@ -335,61 +342,10 @@
 
         });
     </script>
-    <script>
-        $(document).ready(function() {
-
-            // open edit modal
-            $('.btnEdit').click(function() {
-                let id = $(this).data('id');
-
-                $.ajax({
-                    url: '/customers/' + id + '/edit',
-                    type: 'GET',
-                    success: function(data) {
-
-                        $('#edit_id').val(data.id);
-                        $('#c_name').val(data.name);
-                        $('#phone').val(data.phone);
-                        $('#date').val(data.date);
-
-                        $('#editModal').modal('show');
-                    }
-                });
-            });
 
 
-            // update Data
-            $('#btnUpdate').click(function() {
 
-                let id = $('#edit_id').val();
 
-                $.ajax({
-                    url: '/customers/' + id,
-                    type: 'PUT',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        name: $('#c_name').val(),
-                        phone: $('#phone').val(),
-                        date: $('#date').val()
-                    },
-
-                    success: function(response) {
-                        alert('Updated Successfully');
-
-                        $('#editModal').modal('hide');
-
-                        location.reload(); // refresh table
-                    },
-
-                    error: function(xhr) {
-                        alert('Error updating data');
-                    }
-                });
-
-            });
-
-        });
-    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

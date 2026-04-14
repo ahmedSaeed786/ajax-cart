@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
         // $orders = order::with('customer')->get();
-        $orders = cutomer::withSum('item', 'total')->get();
+        $orders = cutomer::withSum('item', 'total')->with('item')->get();
 
         $items = item::get();
         return view('home', compact('items', 'orders'));
