@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\item;
 use App\Models\order;
+use App\Models\cutomer;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $orders = order::with('customer')->get();
+        // $orders = order::with('customer')->get();
+        $orders = cutomer::withSum('item', 'total')->get();
 
         $items = item::get();
         return view('home', compact('items', 'orders'));

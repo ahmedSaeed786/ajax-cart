@@ -15,8 +15,12 @@ class CutomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function show($id)
     {
+
+        $customer = cutomer::withSum('item', 'total')->with('item')->where('id', $id)->first();
+
+        return view('layouts.invoice', compact('customer'));
 
 
         //
@@ -97,27 +101,32 @@ class CutomerController extends Controller
      */
     public function add(Request $request) {}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(cutomer $cutomer)
-    {
-        //
-    }
+
+    public function edit(cutomer $cutomer) {}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, cutomer $cutomer)
+    public function update(Request $request)
     {
+
+        $customer = cutomer::where('id', $request->id)->update([
+
+            "name" => $request->c_name,
+            "phone" => $request->phone,
+            "date" => $request->date,
+        ]);
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(cutomer $cutomer)
+    public function destroy($id)
     {
-        //
+        cutomer::where('id', $id)->delete();
+        order::where('c_id', $id)->delete();
+
+        return back();
     }
 }
