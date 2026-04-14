@@ -2,161 +2,149 @@
 
 @section('content')
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
 
 
 
+    <form method="POST" action="{{ route('customer') }}" id="customerForm">
+
+        @csrf
+        <input type="hidden" name="items" id="itemsInput">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="row">
+            <div class="col">
+                <input type="text" id="customer_name" autocomplete="off" placeholder="Customer Name" name="customer_name"
+                    class="form-control">
+
+            </div>
+            <div class="col">
 
 
-                        <form method="POST" action="{{ route('customer') }}" id="customerForm">
-
-                            @csrf
-                            <input type="hidden" name="items" id="itemsInput">
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" id="customer_name" autocomplete="off" placeholder="Customer Name"
-                                        name="customer_name" class="form-control">
-
-                                </div>
-                                <div class="col">
-
-
-                                    <input type="text" value="<?php echo date('Y-m-d'); ?>" class="form-control datetimepicker"
-                                        name="date" placeholder="Select Date">
-                                </div>
-                            </div>
-
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" id="phone" autocomplete="off" placeholder="Customer Phone"
-                                        name="phone" class="form-control">
-
-                                </div>
-
-                            </div>
-
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" autocomplete="off" class="form-control" id="name"
-                                        name="name" placeholder="Item Name">
-                                </div>
-                                <div class="col">
-                                    <input type="text" autocomplete="off" class="form-control" id="qty"
-                                        name="qty" placeholder="Quantity">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" autocomplete="off"id="amount" name="amount"
-                                        value="{{ old('amount') }}"placeholder="Amount">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" autocomplete="off"
-                                        value="{{ old('total') }}" name="total" placeholder="Total">
-                                </div>
-                                <div class="col">
-                                    <input type="button" value="Add Item" id="btnAddItem" class="btn btn-success">
-                                    {{-- <input type="submit" id="action"name="action" value="Add Item" id="btnsubmit"> --}}
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-primary">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Item</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @foreach ($items as $item)
-                                            <tr class="">
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->qty }}</td>
-                                                <td> {{ $item->amount }}</td>
-                                                <td>{{ $item->total }}</td>
-                                            </tr>
-                                        @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="row" style="float: right">
-                                <div class="col">
-                                    <button type="submit" name="action" value="customer" class="btn btn-primary">
-                                        Submit
-                                    </button>
-
-                                    {{-- <button type="submit" id="action" value="customer"
-                                        name="action"class="btn btn-primary">Submit</button> --}}
-                                </div>
-                            </div>
-
-                        </form>
-
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-primary">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Customer Name</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">phone</th>
-                                    <th scope="col">item</th>
-                                    <th scope="col">total</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach ($orders as $order)
-                                    <tr class="">
-                                        <td>{{ $order->name }}</td>
-                                        <td>{{ $order->date }}</td>
-                                        <td>{{ $order->phone }}</td>
-                                        <td>
-                                            <select class="custom-dropdown" name="options">
-                                                @foreach ($order->item as $detail)
-                                                    <option value="">{{ $detail->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>{{ $order->item_sum_total }}</td>
-
-
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-
-
-                    </div>
-                </div>
+                <input type="text" value="<?php echo date('Y-m-d'); ?>" class="form-control datetimepicker" name="date"
+                    placeholder="Select Date">
             </div>
         </div>
+
+        <br>
+        <div class="row">
+            <div class="col">
+                <input type="text" id="phone" autocomplete="off" placeholder="Customer Phone" name="phone"
+                    class="form-control">
+
+            </div>
+
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col">
+                <input type="text" autocomplete="off" class="form-control" id="name" name="name"
+                    placeholder="Item Name">
+            </div>
+            <div class="col">
+                <input type="text" autocomplete="off" class="form-control" id="qty" name="qty"
+                    placeholder="Quantity">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" autocomplete="off"id="amount" name="amount"
+                    value="{{ old('amount') }}"placeholder="Amount">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" autocomplete="off" value="{{ old('total') }}" name="total"
+                    placeholder="Total">
+            </div>
+            <div class="col">
+                <input type="button" value="Add Item" id="btnAddItem" class="btn btn-success">
+                {{-- <input type="submit" id="action"name="action" value="Add Item" id="btnsubmit"> --}}
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach ($items as $item)
+                        <tr class="">
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->qty }}</td>
+                            <td> {{ $item->amount }}</td>
+                            <td>{{ $item->total }}</td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row" style="float: right">
+            <div class="col">
+                <button type="submit" name="action" value="customer" class="btn btn-primary">
+                    Submit
+                </button>
+
+                {{-- <button type="submit" id="action" value="customer"
+                                        name="action"class="btn btn-primary">Submit</button> --}}
+            </div>
+        </div>
+
+    </form>
+
     </div>
+
+    <div class="table-responsive">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">phone</th>
+                    <th scope="col">item</th>
+                    <th scope="col">total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach ($orders as $order)
+                    <tr class="">
+                        <td>{{ $order->name }}</td>
+                        <td>{{ $order->date }}</td>
+                        <td>{{ $order->phone }}</td>
+                        <td>
+                            <select class="custom-dropdown" name="options">
+                                @foreach ($order->item as $detail)
+                                    <option value="">{{ $detail->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>{{ $order->item_sum_total }}</td>
+
+
+                    </tr>
+                @endforeach
+
+            </tbody>
+        </table>
+
+
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -359,3 +347,4 @@
     </script>
 
 @endsection
+{{-- https://codepen.io/thehelpfultipper/pen/dyQyOYQ --}}
